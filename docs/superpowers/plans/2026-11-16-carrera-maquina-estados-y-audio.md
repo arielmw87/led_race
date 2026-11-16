@@ -32,7 +32,7 @@
 
 ---
 
-### Tarea 1: Env de tests, ajustes y antirrebote
+### Task 1: Env de tests, ajustes y antirrebote
 
 **Archivos:**
 - Modificar: `platformio.ini` (reemplazar el env único por `nano_activo`, `nano_pasivo`, `native`; `[platformio] default_envs = nano_activo`)
@@ -73,7 +73,7 @@
 - [ ] **Paso 5:** `pio test -e native -f test_antirrebote`. Esperado: 5 tests PASAN.
 - [ ] **Paso 6: Commit** `feat: env de tests nativos, ajustes y antirrebote de dos flancos`
 
-### Tarea 2: Física de los autos
+### Task 2: Física de los autos
 
 **Archivos:**
 - Crear: `lib/autos/autos.h`, `lib/autos/autos.c`
@@ -110,7 +110,7 @@
 - [ ] **Paso 4:** `pio test -e native -f test_autos`. Esperado: 8 PASAN.
 - [ ] **Paso 5: Commit** `feat: física de autos con impulso por pulsación y rozamiento`
 
-### Tarea 3: Máquina de estados del juego
+### Task 3: Máquina de estados del juego
 
 **Archivos:**
 - Crear: `lib/juego/juego.h`, `lib/juego/juego.c`
@@ -182,7 +182,7 @@
 - [ ] **Paso 4:** `pio test -e native`. Esperado: pasan todos los tests (antirrebote, autos, juego).
 - [ ] **Paso 5: Commit** `feat: máquina de estados del juego (invitación, armado, semáforo, carrera, festejo)`
 
-### Tarea 4: Motor de audio (pasivo y activo)
+### Task 4: Motor de audio (pasivo y activo)
 
 **Archivos:**
 - Crear: `lib/sonido/sonido.h`, `lib/sonido/sonido.c` (portado de `C:\Proyectos\rfid-reader\lib\buzzer\buzzer.c` y `.h`)
@@ -214,7 +214,7 @@
 - [ ] **Paso 2:** `pio run -e nano_pasivo` y `pio run -e nano_activo` con un `main.c` temporal que sólo llame `sonido_iniciar(); sonido_tocar(SND_FESTEJO); sei(); for(;;);`. Antes, sacar `src/main.cpp` del build moviéndolo a `src/main.cpp.viejo` (en la Tarea 5 se borra). Esperado: los dos envs dan `SUCCESS`.
 - [ ] **Paso 3: Commit** `feat: motor de audio portado del rfid-reader con envs de buzzer pasivo y activo`
 
-### Tarea 5: Hardware, efectos e integración
+### Task 5: Hardware, efectos e integración
 
 **Archivos:**
 - Crear: `lib/tira/tira.h`, `lib/tira/tira.c`. Se toman `struct LED`, `led[NL]`, `mandar_byte/start/stop`, `refresh_leds` y `off_leds` de `utiles.cpp`, renombrados `tira_refrescar()`, `tira_apagar()` y `tira_pintar(uint16_t pos, uint8_t r, uint8_t g, uint8_t b, uint8_t brillo)` con la guarda `pos >= NL`.
@@ -238,7 +238,7 @@
 - [ ] **Paso 4:** `pio test -e native`. Esperado: todo PASA.
 - [ ] **Paso 5: Commit** `feat: integración de la máquina de estados con tira, display, efectos y sonido`
 
-### Tarea 6: Documentación
+### Task 6: Documentación
 
 **Archivos:**
 - Modificar: `README.md`. Actualizar "Cómo se juega" con el flujo nuevo. Sumar una sección "Buzzer activo o pasivo" (envs y cómo elegir en VS Code), una sección "Ajustes" (apunta a `lib/ajustes/ajustes.h` con una tabla síntoma → constante → hacia dónde moverla) y una sección "Tests" (`pio test -e native`). Actualizar la estructura del código.
