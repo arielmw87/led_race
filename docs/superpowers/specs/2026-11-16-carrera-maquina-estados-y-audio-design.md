@@ -38,8 +38,8 @@ El juego actual (escrito por un alumno) funciona, pero su dinámica es confusa: 
 - RAM: hoy se usan 1047 de 2048 bytes (el arreglo `led[240]` ocupa 960). No duplicar el buffer de LEDs.
 - **Timer0** ya está tomado: interrupción de 1 ms que multiplexa el display, cuenta tiempo (`hola`) y filtra el rebote de los botones. Se mantiene así. `millis()`/`delay()` no existen.
 - **Timer1 y Timer2** están libres: los usa el motor de audio.
-- Buzzer en **PB5** (no es salida de timer). Ningún pin libre es salida de timer.
-- Pines: botones PB2 (J1), PB3 (J2), PB4 (select), activos en bajo con pull-up; tira APA102/SK9822 en PC4 (datos) / PC5 (clock); display de 4 dígitos ánodo común, segmentos PB0–PB1 y PD2–PD7, dígitos PC0–PC3.
+- **Cambio de cableado (decidido con el usuario):** buzzer en **PB2** (OC1B, salida PWM del Timer1); botón J1 en **PB3**, J2 en **PB4**, select en **PB5** (D13). D13 tiene el LED de la placa: el select necesita **pull-up externo de ~4,7 kΩ** a 5 V.
+- Pines: botones PB3 (J1), PB4 (J2), PB5 (select), activos en bajo con pull-up; tira APA102/SK9822 en PC4 (datos) / PC5 (clock); display de 4 dígitos ánodo común, segmentos PB0–PB1 y PD2–PD7, dígitos PC0–PC3.
 - Colores: jugador 1 = verde, jugador 2 = azul. El rojo no pertenece a ningún auto y se usa para el semáforo.
 
 ## Diseño
@@ -101,15 +101,15 @@ Muestra las vueltas completadas: dígito izquierdo = jugador 1, dígito derecho 
 ### Audio
 
 **Motor portado del rfid-reader** (`C:\Proyectos\rfid-reader\lib\buzzer\buzzer.c`):
-- **Timer1** genera el tono. Como PB5 no es salida de timer, se usa la variante del 1284P: modo CTC con dos interrupciones mínimas (COMPA sube el pin, COMPB lo baja), que en el original son `ISR_NAKED` con `sbi`/`cbi`.
+- **Timer1** genera el tono por PWM de hardware en PB2 (OC1B), como la variante 328P del original pero usando OC1B (`COM1B1`, `OCR1B`) en vez de OC1A. Así el tono sale limpio sin interrupciones por ciclo.
 - **Timer2** hace de secuenciador cada 10 ms: notas, glides, fades y ruido.
 - Suena en segundo plano: el juego llama "tocar sonido X" y sigue.
 - Se puede recortar el catálogo a los sonidos que se usen y agregar los nuevos.
 - **Se porta casi tal cual, como caja negra** (decidido con el usuario): se traducen los comentarios al español y se agrega una explicación general arriba de qué hace y cómo se usa, pero no se reescribe en estilo didáctico. El objetivo didáctico aplica al resto del código.
 
-**Dos envs de compilación** en `platformio.ini`, con el mismo pin PB5 (decidido con el usuario):
+**Dos envs de compilación** en `platformio.ini`, con el mismo pin PB2 (decidido con el usuario):
 - `nano_pasivo` con `BUZZER_PASIVO`: tonos completos y motor.
-- `nano_activo` con `BUZZER_ACTIVO`: mismo catálogo y misma API, pero PB5 se prende mientras una nota tiene volumen y se apaga en los silencios, o sea la versión rítmica de cada sonido. No hay sonido de motor.
+- `nano_activo` con `BUZZER_ACTIVO`: mismo catálogo y misma API, pero PB2 se prende mientras una nota tiene volumen y se apaga en los silencios, o sea la versión rítmica de cada sonido. No hay sonido de motor.
 - El env por defecto es `nano_activo`, porque es el hardware montado hoy *(decisión del diseñador)*.
 
 **Sonido de motor (sólo en pasivo):**

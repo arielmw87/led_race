@@ -17,7 +17,7 @@
 - Sin números mágicos: toda constante ajustable va en `lib/ajustes/ajustes.h`, documentada con qué hace, unidad, valor inicial y "si subís/bajás, pasa…".
 - Ningún bucle o espera bloqueante en la lógica del juego, los efectos o los sonidos.
 - Timer0 = tick de 1 ms (CTC, presc. 64, OCR0A=249), igual que hoy. Timer1 = tono, Timer2 = secuenciador de audio.
-- Pines: J1=PB2, J2=PB3, select=PB4 (activos en bajo, pull-up), buzzer=PB5, tira datos=PC4 y clock=PC5, dígitos PC0–PC3, segmentos PB0–PB1 y PD2–PD7 (ánodo común, activos en bajo). NL=240.
+- Pines: J1=PB3, J2=PB4, select=PB5 (activos en bajo, pull-up interno; select con pull-up externo 4,7 kΩ por el LED de D13), buzzer=PB2 (OC1B), tira datos=PC4 y clock=PC5, dígitos PC0–PC3, segmentos PB0–PB1 y PD2–PD7 (ánodo común, activos en bajo). NL=240.
 - Colores: J1 verde, J2 azul, semáforo rojo.
 - RAM: el buffer `led[240]` (960 B) es el único buffer de LEDs. Después de cada tarea de firmware, la RAM total reportada por `pio run` tiene que quedar por debajo del 75 %.
 - Envs: `nano_activo` (`-D BUZZER_ACTIVO`, por defecto) y `nano_pasivo` (`-D BUZZER_PASIVO`), ambos `board = nanoatmega328new`; más `native` para tests.
@@ -198,7 +198,7 @@
   void sonido_motor(uint16_t hz);      /* 0 = motor apagado; ignorado en BUZZER_ACTIVO */
   uint8_t sonido_sonando(void);        /* 1 mientras suena un sonido del catálogo */
   ```
-- Se porta tal cual el mecanismo (`note_t`, macros `NOTE`/`GLIDE`/`FADE`/`REST`/`NOISE`/`END`, secuenciador en Timer2, `set_tone`, LFSR) con los comentarios traducidos. Se toma la rama 1284P del tono (CTC + ISR naked COMPA/COMPB) con `BUZZ_PORT = PORTB` y `BUZZ_BIT = PB5`. Se elimina `buzzer_beep` y el volumen maestro; no hay `config.h` (las macros de pin van en `sonido.c`). El inicializador designado `[SND_X] =` se mantiene, porque es C99.
+- Se porta tal cual el mecanismo (`note_t`, macros `NOTE`/`GLIDE`/`FADE`/`REST`/`NOISE`/`END`, secuenciador en Timer2, `set_tone`, LFSR) con los comentarios traducidos. Se toma la rama 328P del tono (fast PWM modo 14, TOP=ICR1) pero sobre **OC1B/PB2**: `COM1B1` y `OCR1B` en lugar de `COM1A1`/`OCR1A`. Sin ISR de Timer1. Se elimina `buzzer_beep` y el volumen maestro; no hay `config.h` (las macros de pin van en `sonido.c`). El inicializador designado `[SND_X] =` se mantiene, porque es C99.
 - Catálogo nuevo:
   - `SND_LUZ`: `NOTE(880,120)`.
   - `SND_LARGADA`: `NOTE(1760,400)`.
@@ -207,7 +207,7 @@
   - `SND_FESTEJO`: el `SND_LEVELWIN_P` original seguido del `SND_POWERUP_P`.
   - `SND_ARMANDO`: `FADE(1047,60,180,0)`.
 - Motor (sólo `BUZZER_PASIVO`): con `motor_hz != 0` y sin sonido de catálogo, el secuenciador Timer2 sigue corriendo y cada 10 ms pone `set_tone(motor_hz ± MOTOR_VIBRATO_HZ alternado, MOTOR_VOLUMEN)`. Al terminar un sonido de catálogo, si el motor está activo, se sigue con el motor en vez de `buzz_stop()`.
-- `BUZZER_ACTIVO`: `tone_init` no toca el Timer1. `tone_on` pone PB5 en alto y `tone_off` en bajo. `sonido_motor` no hace nada. No se definen las ISR de Timer1.
+- `BUZZER_ACTIVO`: `tone_init` no toca el Timer1. `tone_on` pone PB2 en alto y `tone_off` en bajo. `sonido_motor` no hace nada.
 - Encabezado: qué hace el módulo, cómo se usa, que se portó del rfid-reader y se deja como caja negra, cómo agregar un sonido.
 
 - [ ] **Paso 1: Portar** `sonido.c` y `sonido.h` según lo anterior.
@@ -226,7 +226,7 @@
   - SEMAFORO: 5 bloques rojos de NL/5, prendidos según `luces`.
   - CARRERA: cada auto con su color y una estela de 5 LEDs que se desvanece.
   - FESTEJO: destellos al azar del color del ganador más un pulso de brillo.
-- Crear: `src/main.c`. Init de pines (como el `main.cpp` actual, más PB5 en salida), `temporizador_iniciar()`, `sonido_iniciar()`, `sei()`. En el loop:
+- Crear: `src/main.c`. Init de pines (como el `main.cpp` actual, buzzer PB2 en salida, botones PB3–PB5 entrada con pull-up), `temporizador_iniciar()`, `sonido_iniciar()`, `sei()`. En el loop:
   - `juego_paso` → eventos → `sonido_tocar`. Prioridad: GANADOR > DESCALIFICADO > LARGADA > LUZ > VUELTA > ARMANDO.
   - Motor: en CARRERA, `sonido_motor(MOTOR_HZ_MIN + (velocidad del líder × (MAX-MIN)) / VELOCIDAD_MAXIMA)`; fuera de carrera, `sonido_motor(0)`.
   - `efectos_dibujar`, y después `display_vueltas` con las vueltas de los autos.
