@@ -100,6 +100,10 @@ static uint8_t entrar_al_semaforo(juego_t *j, uint32_t ahora, uint16_t azar)
     j->luces = 1; /* la primera luz se prende apenas se entra */
     j->quien_solto = 0;
     j->ganador = 0;
+    /* Nueva carrera: las vueltas (y el display) vuelven a 0. Los dos tienen
+       el botón apretado, por eso el 1. */
+    auto_reiniciar(&j->autos[0], 1);
+    auto_reiniciar(&j->autos[1], 1);
     /* El tiempo que quedan todas prendidas se elige AL AZAR para que nadie
        pueda "adivinar" la largada contando. */
     j->espera_apagado = SEMAFORO_ESPERA_MIN_MS +

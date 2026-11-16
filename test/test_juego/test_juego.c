@@ -87,6 +87,15 @@ static void test_armado_2s_pasa_a_semaforo_con_primera_luz(void)
     TEST_ASSERT_TRUE(ev & EV_LUZ_SEMAFORO);
 }
 
+static void test_semaforo_pone_vueltas_en_cero(void)
+{
+    j.autos[0].vueltas = 2;
+    j.autos[1].vueltas = 3;
+    llegar_al_semaforo();
+    TEST_ASSERT_EQUAL_UINT8(0, j.autos[0].vueltas);
+    TEST_ASSERT_EQUAL_UINT8(0, j.autos[1].vueltas);
+}
+
 static void test_semaforo_prende_5_luces_a_1s(void)
 {
     llegar_al_semaforo();
@@ -282,6 +291,7 @@ int main(void)
     RUN_TEST(test_uno_solo_no_arma);
     RUN_TEST(test_soltar_en_armado_vuelve_sin_penalidad);
     RUN_TEST(test_armado_2s_pasa_a_semaforo_con_primera_luz);
+    RUN_TEST(test_semaforo_pone_vueltas_en_cero);
     RUN_TEST(test_semaforo_prende_5_luces_a_1s);
     RUN_TEST(test_largada_tras_espera_minima);
     RUN_TEST(test_largada_tras_espera_maxima);
