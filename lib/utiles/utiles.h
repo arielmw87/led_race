@@ -10,10 +10,10 @@ struct LED
 };
 
 
-void color_rojo(uint8_t pos);
-void color_verde(uint8_t pos);
-void color_azul(uint8_t pos);
-void apagar_led(uint8_t pos);
+void color_rojo(uint16_t pos);
+void color_verde(uint16_t pos);
+void color_azul(uint16_t pos);
+void apagar_led(uint16_t pos);
 
 void buzzer (void);
 void mandar_byte(uint8_t val);

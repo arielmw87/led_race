@@ -40,35 +40,47 @@ static uint32_t tiempo_buzzer = 0;
 
 struct LED led[NL];
 
-void color_rojo(uint8_t pos)
+void color_rojo(uint16_t pos)
 {
-
+    if (pos >= NL)
+    {
+        return; // fuera de la tira
+    }
     led[pos].R = 255;
     led[pos].G = 0;
     led[pos].B = 0;
     led[pos].brightness = 31;
 }
-void color_verde(uint8_t pos)
+void color_verde(uint16_t pos)
 {
-
+    if (pos >= NL)
+    {
+        return; // fuera de la tira
+    }
     led[pos].R = 0;
     led[pos].G = 255;
     led[pos].B = 0;
     led[pos].brightness = 31;
 }
 
-void color_azul(uint8_t pos)
+void color_azul(uint16_t pos)
 {
-
+    if (pos >= NL)
+    {
+        return; // fuera de la tira
+    }
     led[pos].R = 0;
     led[pos].G = 0;
     led[pos].B = 255;
     led[pos].brightness = 31;
 }
 
-void apagar_led(uint8_t pos)
-
+void apagar_led(uint16_t pos)
 {
+    if (pos >= NL)
+    {
+        return; // fuera de la tira
+    }
     led[pos].R = 0;
     led[pos].G = 0;
     led[pos].B = 0;
@@ -160,7 +172,7 @@ void phaser_leds(struct LED led[])
     led[nled].B = ledito.B;
     led[nled].brightness = 31;
 
-    if (nled > NL)
+    if (nled >= NL - 1)
     {
 
         nled = 0;
@@ -260,12 +272,12 @@ void efecto_ganar_1(struct LED led[])
                 for (uint16_t i = 0; i < 240; i++)
                 
                 {
+                    off_leds();
+                    posicion++;
                     if (posicion >= NL)
                     {
                         posicion = 0;
                     }
-                    off_leds();
-                    posicion++;
                     color_verde(posicion);
                     refresh_leds();
                 }
@@ -321,12 +333,12 @@ void efecto_ganar_2(struct LED led[])
                 for (uint16_t i = 0; i < 240; i++)
                 
                 {
+                    off_leds();
+                    posicion1++;
                     if (posicion1 >= NL)
                     {
                         posicion1 = 0;
                     }
-                    off_leds();
-                    posicion1++;
                     color_azul(posicion1);
                     refresh_leds();
                 }
