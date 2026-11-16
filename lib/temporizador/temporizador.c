@@ -11,7 +11,12 @@
  *
  * Botones (activos en bajo, con pull-up): J1 = PB3, J2 = PB4, SELECT = PB5.
  * Ojo: PB5 es el D13 del Nano, que tiene el LED de la placa conectado. Para
- * que lea bien, el botón SELECT necesita un pull-up externo de ~4,7 kΩ a 5 V.
+ * que lea bien, el botón SELECT necesita un pull-up externo FUERTE, de
+ * ~470 Ω a 5 V. ¿Por qué tan chico? El LED y su resistencia de 1 kΩ van a
+ * GND y forman un divisor con el pull-up: con 4,7 kΩ el pin queda en
+ * ~2,3 V, y el micro necesita al menos 3 V para leer un 1. Con 470 Ω queda
+ * en ~4 V. (Si no, el juego cree que select está siempre apretado y aborta
+ * todas las largadas.)
  */
 #include "temporizador.h"
 #include "antirrebote.h"

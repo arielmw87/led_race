@@ -17,7 +17,7 @@
 - Sin números mágicos: toda constante ajustable va en `lib/ajustes/ajustes.h`, documentada con qué hace, unidad, valor inicial y "si subís/bajás, pasa…".
 - Ningún bucle o espera bloqueante en la lógica del juego, los efectos o los sonidos.
 - Timer0 = tick de 1 ms (CTC, presc. 64, OCR0A=249), igual que hoy. Timer1 = tono, Timer2 = secuenciador de audio.
-- Pines: J1=PB3, J2=PB4, select=PB5 (activos en bajo, pull-up interno; select con pull-up externo 4,7 kΩ por el LED de D13), buzzer=PB2 (OC1B), tira datos=PC4 y clock=PC5, dígitos PC0–PC3, segmentos PB0–PB1 y PD2–PD7 (ánodo común, activos en bajo). NL=240.
+- Pines: J1=PB3, J2=PB4, select=PB5 (activos en bajo, pull-up interno; select con pull-up externo ~470 Ω por el LED de D13), buzzer=PB2 (OC1B), tira datos=PC4 y clock=PC5, dígitos PC0–PC3, segmentos PB0–PB1 y PD2–PD7 (ánodo común, activos en bajo). NL=240.
 - Colores: J1 verde, J2 azul, semáforo rojo.
 - RAM: el buffer `led[240]` (960 B) es el único buffer de LEDs. Después de cada tarea de firmware, la RAM total reportada por `pio run` tiene que quedar por debajo del 75 %.
 - Envs: `nano_activo` (`-D BUZZER_ACTIVO`, por defecto) y `nano_pasivo` (`-D BUZZER_PASIVO`), ambos `board = nanoatmega328new`; más `native` para tests.

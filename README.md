@@ -25,7 +25,7 @@ Para probar con un solo auto, hay que apretar los dos botones y hacer la largada
 | D10 (PB2) | Buzzer (activo o pasivo, ver abajo) |
 | D11 (PB3) | Botón jugador 1 (a GND, pull-up interno) |
 | D12 (PB4) | Botón jugador 2 (a GND, pull-up interno) |
-| D13 (PB5) | Botón select (a GND) **+ pull-up externo de ~4,7 kΩ a 5 V** |
+| D13 (PB5) | Botón select (a GND) **+ pull-up externo de ~470 Ω a 5 V** |
 | A4 (PC4) | Tira LED — datos |
 | A5 (PC5) | Tira LED — clock |
 | A0–A3 (PC0–PC3) | Habilitación de los 4 dígitos del display |
@@ -33,7 +33,7 @@ Para probar con un solo auto, hay que apretar los dos botones y hacer la largada
 
 - La tira es APA102 / SK9822 (datos + clock, brillo de 5 bits por LED), alimentada con una fuente de 40 A.
 - El display es de 4 dígitos de ánodo común.
-- El D13 tiene el LED de la placa conectado. Por eso el select necesita el pull-up externo: con sólo el interno, el pin puede leerse como apretado sin que nadie lo toque.
+- El D13 tiene el LED de la placa conectado (con 1 kΩ a GND). Por eso el select necesita un pull-up externo **fuerte**: con el interno, o incluso con 4,7 kΩ, el pin queda por debajo de 3 V y se lee como apretado, y el juego aborta todas las largadas. Con 470 Ω queda en ~4 V. Conviene medir el pin con el tester (suelto tiene que dar más de 3,5 V).
 
 ## Buzzer activo o pasivo
 

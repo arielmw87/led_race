@@ -32,7 +32,7 @@ pio test -e native -f test_juego  # a single test suite
 | Pin | Use |
 |-----|-----|
 | PB2 (D10) | Buzzer (OC1B) |
-| PB3, PB4, PB5 | Buttons J1, J2, select. Active-low with internal pull-ups; select (D13, onboard LED) needs an external ~4.7 kΩ pull-up |
+| PB3, PB4, PB5 | Buttons J1, J2, select. Active-low with internal pull-ups; select (D13, onboard LED) needs a strong external pull-up (~470 Ω; 4.7 kΩ is NOT enough: the LED+1 kΩ to GND holds the pin near 2.3 V, read as pressed) |
 | PC4 / PC5 | LED strip data / clock (APA102/SK9822) |
 | PC0–PC3 | 7-seg digit enables (left = J1 laps, right = J2 laps) |
 | PB0–PB1, PD2–PD7 | 7-seg segments (common anode, active-low) |

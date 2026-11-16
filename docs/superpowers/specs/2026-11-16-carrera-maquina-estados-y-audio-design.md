@@ -38,7 +38,7 @@ El juego actual (escrito por un alumno) funciona, pero su dinámica es confusa: 
 - RAM: hoy se usan 1047 de 2048 bytes (el arreglo `led[240]` ocupa 960). No duplicar el buffer de LEDs.
 - **Timer0** ya está tomado: interrupción de 1 ms que multiplexa el display, cuenta tiempo (`hola`) y filtra el rebote de los botones. Se mantiene así. `millis()`/`delay()` no existen.
 - **Timer1 y Timer2** están libres: los usa el motor de audio.
-- **Cambio de cableado (decidido con el usuario):** buzzer en **PB2** (OC1B, salida PWM del Timer1); botón J1 en **PB3**, J2 en **PB4**, select en **PB5** (D13). D13 tiene el LED de la placa: el select necesita **pull-up externo de ~4,7 kΩ** a 5 V.
+- **Cambio de cableado (decidido con el usuario):** buzzer en **PB2** (OC1B, salida PWM del Timer1); botón J1 en **PB3**, J2 en **PB4**, select en **PB5** (D13). D13 tiene el LED de la placa: el select necesita **pull-up externo fuerte (~470 Ω)** a 5 V. (Corregido en la revisión: con 4,7 kΩ el LED de la placa deja el pin en ~2,3 V y se lee como apretado.)
 - Pines: botones PB3 (J1), PB4 (J2), PB5 (select), activos en bajo con pull-up; tira APA102/SK9822 en PC4 (datos) / PC5 (clock); display de 4 dígitos ánodo común, segmentos PB0–PB1 y PD2–PD7, dígitos PC0–PC3.
 - Colores: jugador 1 = verde, jugador 2 = azul. El rojo no pertenece a ningún auto y se usa para el semáforo.
 
